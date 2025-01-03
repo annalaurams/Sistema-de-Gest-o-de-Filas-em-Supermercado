@@ -1,0 +1,50 @@
+João da Silva
+12345678901
+1
+5
+1
+Maria Oliveira
+98765432100
+2
+3
+1
+Thiago Pereira
+11122334455
+3
+2
+2
+Anna Moura
+22233445566
+1
+1
+2
+Lucas Santos
+33344556677
+2
+10
+2
+Fernanda Almeida
+44455667788
+1
+6
+3
+Júlia Fernandes
+55566778899
+3
+3
+3
+Andre Lima
+66677889900
+2
+2
+5
+Patrícia Rocha
+77788990011
+1
+13
+1
+Flora Rodrigues
+88899001122
+3
+5
+2
