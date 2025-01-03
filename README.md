@@ -14,7 +14,7 @@
 ## Sumário
 
 1. [Objetivo](#-objetivo)
-2. [Estrutura](#-estrutura)
+2. [Estrutura](#estrutura)
 3. [Considerações](#-considerações)
 4. [Funcionalidades](#-funcionalidades)
 5. [Ambiente de Desenvolvimento](#-ambiente-de-desenvolvimento)
@@ -30,7 +30,7 @@ Este projeto consiste em desenvolver um sistema de gestão de filas para um supe
 
 
 
-## 🗂️ Estrutura
+## Estrutura
 
 
 A organização do projeto segue a seguinte estrutura:
