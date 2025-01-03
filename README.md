@@ -32,20 +32,23 @@ Este projeto consiste em desenvolver um sistema de gestão de filas para um supe
 
 ## 🗂️ Estrutura
 
-O projeto está organizado da seguinte maneira:
 
+A organização do projeto segue a seguinte estrutura:
+### 📂 **build/**  
+> Diretório para arquivos compilados.
 
-|— build/              # Diretório para arquivos compilados
-|— data/               # Entrada
-|— src/                # Códigos-fonte do sistema
-|   |— funcoes.c       # Implementação das funcionalidades
-|   |— funcoes.h       # Declaração de funções
-|   |— main.c          # Função principal do programa
-|   |— tipos.h         # Struct caixa, cliente e fila
-|— Makefile            # Scripts para compilação
+### 📂 **data/**  
+> Contém os arquivos de entrada de dados.
 
+### 📂 **src/**  
+> Diretório com os códigos-fonte do sistema:  
+- **funcoes.c**: Implementação das funcionalidades.  
+- **funcoes.h**: Declaração das funções.  
+- **main.c**: Função principal do programa.  
+- **tipos.h**: Definição das structs (*caixa, cliente e fila*).  
 
-
+### 📄 **Makefile**  
+> Scripts para a compilação do sistema.
 
 ## 💡 Considerações
 
