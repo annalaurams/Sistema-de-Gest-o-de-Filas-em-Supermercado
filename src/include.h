@@ -4,6 +4,6 @@
 #include <stdbool.h>  
 #include <string.h>
 #include <ctype.h>
+#include <unistd.h>  
+#include <time.h>
 #include "tipos.h"
-#include "time.h"
-

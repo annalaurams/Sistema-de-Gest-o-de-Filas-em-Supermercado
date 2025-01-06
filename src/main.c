@@ -2,10 +2,6 @@
 
 int main()
 {
-
-    clock_t start_time, end_time;
-    start_time = clock();
-
     int num_caixas = 5;
     int numero_caixa = 0;
     Caixa caixas[num_caixas];
@@ -15,7 +11,6 @@ int main()
     // imprimir_caixa(caixas, num_caixas);
 
     int opcao = 0;
-
     do
     {
         printf("\n=================================================================================================\n");
@@ -42,7 +37,7 @@ int main()
         case 1:
 
             cadastrar_cliente(caixas, num_caixas);
-            // ler_clientes_do_arquivo(caixas, num_caixas);
+            //ler_clientes_do_arquivo(caixas, num_caixas);
             // imprimir_clientes(caixas, num_caixas);
 
             break;
@@ -84,10 +79,6 @@ int main()
 
     } while (opcao != 0);
 
-    end_time = clock();
-    double tempo = (double)(end_time - start_time) / CLOCKS_PER_SEC;
-
-    printf("\n\nTempo de execução: %.6f segundos. \n", tempo);
     printf("\n-------------------------------------------------------------------------------------------------\n");
 
     return 0;

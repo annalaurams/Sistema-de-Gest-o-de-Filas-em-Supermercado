@@ -48,10 +48,11 @@ void inicializar_fila(Fila *fila)
     fila->tamanho = 0; // Inicializa o tamanho da fila como 0
     fila->tamanho = 0;
 }
-// Funções para validar a entrada
-void inserir_fila_com_prioridade(Fila *f, Cliente c)
 
+void inserir_fila_com_prioridade(Fila *f, Cliente c)
 {
+
+// Funções para validar a entrada
     No *novo = malloc(sizeof(No));
     if (!novo)
     {
@@ -72,12 +73,12 @@ void inserir_fila_com_prioridade(Fila *f, Cliente c)
             novo->proximo = f->primeiro;
             f->primeiro = novo;
 
-            if (f->ultimo == NULL) // Fila estava vazia
+            if (f->ultimo == NULL) 
                 f->ultimo = novo;
         }
         else
         {
-            // Inserir após o último cliente com prioridade 1
+
             novo->proximo = f->ultimo_p1->proximo;
             f->ultimo_p1->proximo = novo;
 
@@ -92,7 +93,6 @@ void inserir_fila_com_prioridade(Fila *f, Cliente c)
         {
             if (f->ultimo_p1 == NULL)
             {
-                // Inserir no início da fila (não há prioridade 1 nem 2)
                 novo->proximo = f->primeiro;
                 f->primeiro = novo;
 
@@ -122,7 +122,6 @@ void inserir_fila_com_prioridade(Fila *f, Cliente c)
     }
     else
     {
-        // Inserir no final da fila (prioridade 3)
         if (f->ultimo == NULL)
         {
             // Fila estava vazia
@@ -140,7 +139,7 @@ void inserir_fila_com_prioridade(Fila *f, Cliente c)
 int validar_entrada_numerica(const char *entrada) {
     for (int i = 0; entrada[i] != '\0'; i++) {
         if (!isdigit(entrada[i])) {
-            return 0; // Contém caracteres não numéricos
+            return 0; 
         }
     }
     return 1; 
@@ -151,12 +150,12 @@ int verificar_cpf_existe(Caixa *caixas, int num_caixas, const char *cpf) {
         No *atual = caixas[i].fila.primeiro;
         while (atual != NULL) {
             if (strcmp(atual->cliente.cpf, cpf) == 0) {
-                return 1; // CPF já cadastrado
+                return 1; 
             }
             atual = atual->proximo;
         }
     }
-    return 0; // CPF não encontrado
+    return 0; 
 }
 
 int validar_nome(char nome[])
@@ -165,20 +164,20 @@ int validar_nome(char nome[])
     {
         if (!isalpha(nome[i]) && nome[i] != '\n')
         {
-            return 0; // Nome inválido
+            return 0; 
         }
     }
-    return 1; // Nome válido
+    return 1; 
 }
 
 int validar_cpf(const char *cpf)
 {
-    // Verifica se o CPF tem exatamente 11 caracteres
+
     if (strlen(cpf) != 11)
     {
         return 0;
     }
-    // Verifica se todos os caracteres são números
+  
     for (int i = 0; i < 11; i++)
     {
         if (!isdigit(cpf[i]))
@@ -186,7 +185,7 @@ int validar_cpf(const char *cpf)
             return 0;
         }
     }
-    return 1; // CPF válido
+    return 1; 
 }
 
 void ler_clientes_do_arquivo(Caixa *caixas, int num_caixas)
@@ -219,7 +218,7 @@ void ler_clientes_do_arquivo(Caixa *caixas, int num_caixas)
         }
 
         inserir_fila_com_prioridade(&caixas[cliente.n_caixa - 1].fila, cliente);
-        printf("Cliente cadastrado: %s (CPF: %s) no caixa %d!\n", cliente.nome, cliente.cpf, cliente.n_caixa);
+       // printf("Cliente cadastrado: %s (CPF: %s) no caixa %d!\n", cliente.nome, cliente.cpf, cliente.n_caixa);
     }
 
     fclose(file);
@@ -233,13 +232,11 @@ void cadastrar_cliente(Caixa *caixas, int num_caixas) {
 
     printf("\n\tDigite as informações\n\n");
 
-    // Solicitar o nome
     printf("\nNome: ");
     getchar();
     fgets(cliente.nome, sizeof(cliente.nome), stdin);
     cliente.nome[strcspn(cliente.nome, "\n")] = '\0'; // Remove o '\n' ao final da string
 
-    // Solicitar e validar CPF
     do {
         printf("\nCPF (somente números, 11 dígitos): ");
         scanf("%s", cliente.cpf);
@@ -255,7 +252,6 @@ void cadastrar_cliente(Caixa *caixas, int num_caixas) {
         }
     } while (1);
 
-    // Solicitar prioridade
     do {
         printf("\nPrioridade: \n[1] Alta \n[2] Média \n[3] Baixa \n");
         scanf("%s", entrada);
@@ -268,7 +264,6 @@ void cadastrar_cliente(Caixa *caixas, int num_caixas) {
         }
     } while (1);
 
-    // Solicitar o número de itens
     do {
         printf("\nNúmero de itens no carrinho: ");
         scanf("%s", entrada);
@@ -281,7 +276,6 @@ void cadastrar_cliente(Caixa *caixas, int num_caixas) {
         }
     } while (1);
 
-    // Solicitar o número do caixa
     do {
         printf("\nNúmero Caixa: ");
         scanf("%s", entrada);
@@ -296,7 +290,6 @@ void cadastrar_cliente(Caixa *caixas, int num_caixas) {
 
     printf("\n\tCliente cadastrado na fila do caixa %d!\n\n", cliente.n_caixa);
 
-    // Inserir cliente na fila com prioridade
     inserir_fila_com_prioridade(&caixas[cliente.n_caixa - 1].fila, cliente);
 }
 
@@ -455,7 +448,6 @@ void realocar_clientes_caixa(Caixa *caixas, int num_caixas)
                                     atual = atual->proximo;
                                 }
 
-                                // Zerar a fila do caixa fechado
                                 caixas[i].fila.primeiro = NULL;
                                 caixas[i].fila.ultimo = NULL;
                                 caixas[i].fila.ultimo_p1 = NULL;
@@ -566,7 +558,6 @@ void imprimir_clientes_espera(Caixa *caixas, int num_caixas)
 
 void exibir_estado_caixas(Caixa *caixas, int num_caixas)
 {
-
     for (int i = 0; i < num_caixas; i++)
     {
 
@@ -591,8 +582,6 @@ void abrir_caixa(Caixa *caixas, int num_caixas)
 
     printf("\nNúmero do caixa que deseja abrirr: ");
     scanf("%d", &abrir);
-
-    // Procura o caixa que deseja fechar
 
     printf("\nNúmero do caixa que deseja abrir: ");
     scanf("%d", &abrir);

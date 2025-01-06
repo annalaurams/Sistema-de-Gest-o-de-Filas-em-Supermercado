@@ -15,7 +15,6 @@ typedef struct No {
 
     Cliente cliente;
     struct No *proximo; 
-    //No* proximo;
 
 } No;
 
@@ -23,8 +22,8 @@ typedef struct Fila {
 
     No *primeiro;
     No *ultimo;
-    No *ultimo_p1; // Último nó com prioridade 1
-    No *ultimo_p2; // Último nó com prioridade 2
+    No *ultimo_p1; 
+    No *ultimo_p2; 
     int tamanho;
 
 } Fila;
