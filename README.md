@@ -38,6 +38,9 @@ A organização do projeto segue a seguinte estrutura:
 ### 📂 **data/**  
 > Contém os arquivos de entrada de dados.
 
+### 📂 **img/**  
+> Imagens utilizadas no readme
+
 ### 📂 **src/**  
 > Diretório com os códigos-fonte do sistema:  
 - **funcoes.c**: Implementação das funcionalidades.  
@@ -94,6 +97,13 @@ Na remoção, o primeiro cliente é retirado, e o ponteiro `primeiro` é atualiz
 - **Gerenciamento de Caixas:** Abertura e fechamento de caixas, com realocação automática de clientes entre caixas, quando um deles é fechado, levando para o com a menor fila.
 - **Imprimir a Lista de Clientes em Espera:** Mostrar clientes em espera em cada fila, de acordo com a prioridade.
 - **Imprimir o Status dos Caixas:** Exibir o estado (aberto ou fechado) de cada caixa e o número de clientes em espera.
+
+### Exemplo visual de funcionalidades
+
+<div style="text-align: center;">
+  <img src="img/ex.png" alt="Descrição da imagem" width="400">
+</div>
+
 
 
 ## 💻 Ambiente de Desenvolvimento
