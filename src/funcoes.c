@@ -45,18 +45,16 @@ void inicializar_fila(Fila *fila)
     fila->ultimo = NULL;
     fila->ultimo_p1 = NULL;
     fila->ultimo_p2 = NULL;
-    fila->tamanho = 0; // Inicializa o tamanho da fila como 0
     fila->tamanho = 0;
 }
 
 void inserir_fila_com_prioridade(Fila *f, Cliente c)
 {
-
-// Funções para validar a entrada
+    // Funções para validar a entrada
     No *novo = malloc(sizeof(No));
     if (!novo)
     {
-        printf("Erro ao alocar memória para o novo nó.\n");
+        printf("\n\t[ERRO] Para tentar alocar memória para o novo nó.\n");
         return;
     }
 
@@ -73,7 +71,7 @@ void inserir_fila_com_prioridade(Fila *f, Cliente c)
             novo->proximo = f->primeiro;
             f->primeiro = novo;
 
-            if (f->ultimo == NULL) 
+            if (f->ultimo == NULL)
                 f->ultimo = novo;
         }
         else
@@ -136,26 +134,33 @@ void inserir_fila_com_prioridade(Fila *f, Cliente c)
     }
 }
 
-int validar_entrada_numerica(const char *entrada) {
-    for (int i = 0; entrada[i] != '\0'; i++) {
-        if (!isdigit(entrada[i])) {
-            return 0; 
+int validar_entrada_numerica(const char *entrada)
+{
+    for (int i = 0; entrada[i] != '\0'; i++)
+    {
+        if (!isdigit(entrada[i]))
+        {
+            return 0;
         }
     }
-    return 1; 
+    return 1;
 }
 
-int verificar_cpf_existe(Caixa *caixas, int num_caixas, const char *cpf) {
-    for (int i = 0; i < num_caixas; i++) {
+int verificar_cpf_existe(Caixa *caixas, int num_caixas, const char *cpf)
+{
+    for (int i = 0; i < num_caixas; i++)
+    {
         No *atual = caixas[i].fila.primeiro;
-        while (atual != NULL) {
-            if (strcmp(atual->cliente.cpf, cpf) == 0) {
-                return 1; 
+        while (atual != NULL)
+        {
+            if (strcmp(atual->cliente.cpf, cpf) == 0)
+            {
+                return 1;
             }
             atual = atual->proximo;
         }
     }
-    return 0; 
+    return 0;
 }
 
 int validar_nome(char nome[])
@@ -164,20 +169,19 @@ int validar_nome(char nome[])
     {
         if (!isalpha(nome[i]) && nome[i] != '\n')
         {
-            return 0; 
+            return 0;
         }
     }
-    return 1; 
+    return 1;
 }
 
 int validar_cpf(const char *cpf)
 {
-
     if (strlen(cpf) != 11)
     {
         return 0;
     }
-  
+
     for (int i = 0; i < 11; i++)
     {
         if (!isdigit(cpf[i]))
@@ -185,7 +189,50 @@ int validar_cpf(const char *cpf)
             return 0;
         }
     }
-    return 1; 
+    return 1;
+}
+
+int verificar_caixa_aberto(Caixa *caixas, int num_caixas)
+{
+    char entrada[10];
+    int caixa_escolhido;
+
+    while (1)
+    {
+        printf("\nEscolha o número do caixa (entre 1 e %d): ", num_caixas);
+        scanf("%s", entrada);
+
+        if (!validar_entrada_numerica(entrada))
+        {
+            printf("\n\t[ERRO] Entrada inválida! Digite apenas números.\n");
+            continue;
+        }
+
+        caixa_escolhido = atoi(entrada);
+
+        if (caixa_escolhido < 1 || caixa_escolhido > num_caixas)
+        {
+            printf("\n\t[ERRO]  Número de caixa inválido! Escolha entre 1 e %d.\n", num_caixas);
+            continue;
+        }
+
+        if (caixas[caixa_escolhido - 1].estado == 1)
+        {
+            return caixa_escolhido; // Caixa está aberto
+        }
+        else
+        {
+            printf("\n\t[ATENÇÃO] O caixa %d está fechado, escolha uma das opções abaixo.\n", caixa_escolhido);
+            printf("\n\tCaixas abertos\n");
+            for (int i = 0; i < num_caixas; i++)
+            {
+                if (caixas[i].estado == 1)
+                {
+                    printf("Caixa %d\n", caixas[i].id);
+                }
+            }
+        }
+    }
 }
 
 void ler_clientes_do_arquivo(Caixa *caixas, int num_caixas)
@@ -218,7 +265,7 @@ void ler_clientes_do_arquivo(Caixa *caixas, int num_caixas)
         }
 
         inserir_fila_com_prioridade(&caixas[cliente.n_caixa - 1].fila, cliente);
-       // printf("Cliente cadastrado: %s (CPF: %s) no caixa %d!\n", cliente.nome, cliente.cpf, cliente.n_caixa);
+        // printf("Cliente cadastrado: %s (CPF: %s) no caixa %d!\n", cliente.nome, cliente.cpf, cliente.n_caixa);
     }
 
     fclose(file);
@@ -226,7 +273,8 @@ void ler_clientes_do_arquivo(Caixa *caixas, int num_caixas)
     printf("\nClientes Cadastrados\n");
 }
 
-void cadastrar_cliente(Caixa *caixas, int num_caixas) {
+void cadastrar_cliente(Caixa *caixas, int num_caixas)
+{
     Cliente cliente;
     char entrada[20];
 
@@ -237,55 +285,66 @@ void cadastrar_cliente(Caixa *caixas, int num_caixas) {
     fgets(cliente.nome, sizeof(cliente.nome), stdin);
     cliente.nome[strcspn(cliente.nome, "\n")] = '\0'; // Remove o '\n' ao final da string
 
-    do {
+    do
+    {
         printf("\nCPF (somente números, 11 dígitos): ");
         scanf("%s", cliente.cpf);
 
-        if (!validar_cpf(cliente.cpf)) {
-            printf("CPF inválido! Certifique-se de digitar apenas números e com 11 dígitos.\n");
-        } else {
-            if (verificar_cpf_existe(caixas, num_caixas, cliente.cpf)) {
-                printf("CPF já cadastrado: %s\n", cliente.cpf);
-            } else {
+        if (!validar_cpf(cliente.cpf))
+        {
+            printf("\n\t[ERRO] CPF inválido! Certifique-se de digitar apenas números e com 11 dígitos.\n");
+        }
+        else
+        {
+            if (verificar_cpf_existe(caixas, num_caixas, cliente.cpf))
+            {
+                printf("\n\t[ATENÇÃO] CPF já cadastrado: %s\n", cliente.cpf);
+            }
+            else
+            {
                 break; // CPF válido e não cadastrado
             }
         }
     } while (1);
 
-    do {
-        printf("\nPrioridade: \n[1] Alta \n[2] Média \n[3] Baixa \n");
+    do
+    {
+        printf("\nPrioridade: \n[1] Alta \n[2] Média \n[3] Baixa \n\n> ");
         scanf("%s", entrada);
 
-        if (!validar_entrada_numerica(entrada) || (atoi(entrada) < 1 || atoi(entrada) > 3)) {
-            printf("Prioridade inválida! Escolha entre 1, 2 ou 3.\n");
-        } else {
+        if (!validar_entrada_numerica(entrada) || (atoi(entrada) < 1 || atoi(entrada) > 3))
+        {
+            printf("\n\t[ERRO] Prioridade inválida! Escolha entre 1, 2 ou 3.\n");
+        }
+        else
+        {
             cliente.prioridade = atoi(entrada);
             break;
         }
     } while (1);
 
-    do {
+    do
+    {
         printf("\nNúmero de itens no carrinho: ");
         scanf("%s", entrada);
 
-        if (!validar_entrada_numerica(entrada)) {
-            printf("Entrada inválida! Digite apenas números.\n");
-        } else {
+        if (!validar_entrada_numerica(entrada))
+        {
+            printf("\n\t[ERRO] Entrada inválida! Digite apenas números.\n");
+        }
+        else
+        {
             cliente.numero_itens = atoi(entrada);
             break;
         }
     } while (1);
 
-    do {
-        printf("\nNúmero Caixa: ");
-        scanf("%s", entrada);
-
-        if (!validar_entrada_numerica(entrada) || (atoi(entrada) < 1 || atoi(entrada) > num_caixas)) {
-            printf("Caixa inválido! Escolha entre 1 e %d.\n", num_caixas);
-        } else {
-            cliente.n_caixa = atoi(entrada);
-            break;
-        }
+    do
+    {
+        // printf("\nNúmero do caixa: ");
+        int c = verificar_caixa_aberto(caixas, num_caixas);
+        cliente.n_caixa = c;
+        break;
     } while (1);
 
     printf("\n\tCliente cadastrado na fila do caixa %d!\n\n", cliente.n_caixa);
@@ -328,44 +387,66 @@ void imprimir_clientes(Caixa *caixas, int num_caixas)
     printf("\n===================================================================\n\n");
 }
 
-void remover_cliente(Caixa *caixa)
-{
+void remover_cliente(Caixa *caixas, int num_caixas) {
+    char entrada[10];
+    int numero_caixa;
 
-    if (caixa->fila.tamanho == 0)
-    {
-        printf("\nA fila do caixa %d está vazia.\n", caixa->id);
+    while (1) {
+        printf("\nDigite o número do caixa: ");
+        scanf("%s", entrada);
+
+        if (!validar_entrada_numerica(entrada)) {
+            printf("\n\t[ERRO] Entrada inválida! Digite apenas números.\n");
+            continue;
+        }
+
+        numero_caixa = atoi(entrada) - 1; // Subtrai 1 para ajustar ao índice do vetor
+
+        if (numero_caixa < 0 || numero_caixa >= num_caixas) {
+            printf("\n\t[ERRO] Caixa inválido! Escolha um número entre 1 e %d.\n", num_caixas);
+            continue;
+        }
+
+        Caixa *caixa = &caixas[numero_caixa];
+
+        if (caixa->estado == 0) {
+            printf("\n[ATENÇÃO] O caixa %d está fechado. Escolha um caixa aberto:\n", numero_caixa + 1);
+            for (int i = 0; i < num_caixas; i++) {
+                if (caixas[i].estado == 1) {
+                    printf("Caixa %d\n", caixas[i].id);
+                }
+            }
+            continue; // Retorna ao início do loop para solicitar outro caixa
+        }
+
+        if (caixa->fila.tamanho == 0) {
+            printf("\nA fila do caixa %d está vazia. Não há clientes para serem atendidos\n", caixa->id);
+            return;
+        }
+
+        Cliente cliente_removido = caixa->fila.primeiro->cliente;
+        No *temp = caixa->fila.primeiro;
+
+        caixa->fila.primeiro = caixa->fila.primeiro->proximo; // Move o primeiro para o próximo nó
+
+        // Se a fila agora estiver vazia, atualiza o último
+        if (caixa->fila.primeiro == NULL) {
+            caixa->fila.ultimo = NULL;
+            caixa->fila.ultimo_p1 = NULL;
+            caixa->fila.ultimo_p2 = NULL;
+        } else {
+            if (cliente_removido.prioridade == 1) {
+                caixa->fila.ultimo_p1 = NULL;
+            } else if (cliente_removido.prioridade == 2) {
+                caixa->fila.ultimo_p2 = NULL;
+            }
+        }
+
+        free(temp);
+        caixa->fila.tamanho--;
+        printf("\n%s foi atendido(a) no caixa %d.\n\n", cliente_removido.nome, caixa->id);
         return;
     }
-
-    Cliente cliente_removido = caixa->fila.primeiro->cliente;
-
-    No *temp = caixa->fila.primeiro;
-
-    caixa->fila.primeiro = caixa->fila.primeiro->proximo; // Move o primeiro para o próximo nó
-
-    // Se a fila agora estiver vazia, atualiza o último
-    if (caixa->fila.primeiro == NULL)
-    {
-        caixa->fila.ultimo = NULL;
-        caixa->fila.ultimo_p1 = NULL;
-        caixa->fila.ultimo_p2 = NULL;
-    }
-    else
-    {
-
-        if (cliente_removido.prioridade == 1)
-        {
-            caixa->fila.ultimo_p1 = NULL;
-        }
-        else if (cliente_removido.prioridade == 2)
-        {
-            caixa->fila.ultimo_p2 = NULL;
-        }
-    }
-
-    free(temp);
-    caixa->fila.tamanho--;
-    printf("\n%s foi atendido(a) %d.\n\n", cliente_removido.nome, caixa->id);
 }
 
 void realocar_clientes_caixa(Caixa *caixas, int num_caixas)
@@ -374,7 +455,7 @@ void realocar_clientes_caixa(Caixa *caixas, int num_caixas)
 
     if (auxiliar == 4)
     {
-        printf("\nNão é possível fechar mais caixas\n");
+        printf("\n\t[ATENÇÃO] Não é possível fechar mais caixas.\n");
         printf("\n-------------------------------------------------------------------------------------------------\n");
 
         return;
@@ -387,21 +468,21 @@ void realocar_clientes_caixa(Caixa *caixas, int num_caixas)
 
     if (resultado != 1)
     {
-        printf("Entrada inválida. Por favor, digite apenas números.\n");
+        printf("\n\t[ERRO] Entrada inválida. Por favor, digite apenas números.\n");
 
         while (getchar() != '\n')
-            ; // Limpa até a nova linha
+            ; 
     }
     else
     {
         if (fechar < 1 || fechar > num_caixas)
         {
-            printf("Número do caixa inválido. Deve ser entre 1 e %d.\n", num_caixas);
+            printf(" \n\t[ERRO] Número do caixa inválido. Deve ser entre 1 e %d.\n", num_caixas);
         }
 
         else
         {
-            printf("\nFechando o caixa %d...\n", fechar);
+            printf("\nFechando...\n");
             auxiliar++;
 
             for (int i = 0; i < num_caixas; i++)
@@ -410,7 +491,7 @@ void realocar_clientes_caixa(Caixa *caixas, int num_caixas)
                 {
                     if (caixas[i].estado == 0)
                     {
-                        printf("\nCaixa %d já está fechado.\n", fechar);
+                        printf("\n\t[ATENÇÃO] Caixa %d já está fechado.\n", fechar);
                         return;
                     }
 
@@ -419,7 +500,7 @@ void realocar_clientes_caixa(Caixa *caixas, int num_caixas)
                         if (caixas[j].estado == 1 && j != i)
                         { // Caixa deve estar aberto e não ser o caixa que está sendo fechado
 
-                            printf("\nRealocando clientes do Caixa %d...\n", fechar);
+                            printf("\nRealocando clientes se houver algum\n");
 
                             int menor_fila_idx = -1;
                             int menor_tamanho = __INT_MAX__;
@@ -439,7 +520,7 @@ void realocar_clientes_caixa(Caixa *caixas, int num_caixas)
 
                             if (menor_fila_idx != -1)
                             {
-                                printf("\nClientes do Caixa %d serão realocados para o Caixa %d\n", fechar, caixas[menor_fila_idx].id);
+                                printf("\nSerão realocados para o Caixa %d\n", caixas[menor_fila_idx].id);
 
                                 No *atual = caixas[i].fila.primeiro;
                                 while (atual != NULL)
@@ -460,7 +541,7 @@ void realocar_clientes_caixa(Caixa *caixas, int num_caixas)
 
                             else
                             {
-                                printf("\nNenhum outro caixa aberto disponível para realocação.\n");
+                                printf("\n\t[ATENÇÃO] Nenhum outro caixa aberto disponível para realocação.\n");
                             }
 
                             return;
@@ -469,7 +550,7 @@ void realocar_clientes_caixa(Caixa *caixas, int num_caixas)
                     }
                 }
             }
-            printf("\nCaixa %d não encontrado.\n", fechar);
+            printf("\n\t[ATENÇÃO] Caixa %d não encontrado.\n", fechar);
             printf("\n-------------------------------------------------------------------------------------------------\n");
         }
     }
@@ -486,7 +567,7 @@ void imprimir_clientes_espera(Caixa *caixas, int num_caixas)
 
             if (caixas[i].fila.tamanho == 0)
             {
-                printf("\nNenhum cliente em espera.\n");
+                printf("\n\t[ATENÇÃO] Nenhum cliente em espera.\n");
                 printf("\n-------------------------------------------------------------------------------------------------\n");
                 continue;
             }
@@ -545,7 +626,7 @@ void imprimir_clientes_espera(Caixa *caixas, int num_caixas)
                 atual = atual->proximo;
             }
 
-            //printf("\nResumo: %d clientes de prioridade 1, %d de prioridade 2, %d de prioridade 3.\n", p1, p2, p3);
+            // printf("\nResumo: %d clientes de prioridade 1, %d de prioridade 2, %d de prioridade 3.\n", p1, p2, p3);
         }
         else
         {
@@ -579,9 +660,6 @@ void abrir_caixa(Caixa *caixas, int num_caixas)
 {
 
     int abrir = 0;
-
-    printf("\nNúmero do caixa que deseja abrirr: ");
-    scanf("%d", &abrir);
 
     printf("\nNúmero do caixa que deseja abrir: ");
     scanf("%d", &abrir);

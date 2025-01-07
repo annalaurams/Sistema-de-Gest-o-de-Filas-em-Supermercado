@@ -11,6 +11,7 @@ int main()
     // imprimir_caixa(caixas, num_caixas);
 
     int opcao = 0;
+    
     do
     {
         printf("\n=================================================================================================\n");
@@ -37,22 +38,14 @@ int main()
         case 1:
 
             cadastrar_cliente(caixas, num_caixas);
-            //ler_clientes_do_arquivo(caixas, num_caixas);
-            // imprimir_clientes(caixas, num_caixas);
+            // ler_clientes_do_arquivo(caixas, num_caixas);
+            //  imprimir_clientes(caixas, num_caixas);
 
             break;
 
         case 2:
 
-            printf("\nDigite o número do caixa: ");
-            scanf("%d", &numero_caixa);
-
-            numero_caixa--;
-
-            if (numero_caixa >= 0 && numero_caixa < num_caixas)
-                remover_cliente(&caixas[numero_caixa]);
-            else
-                printf("\nNúmero do caixa inválido.\n");
+            remover_cliente(&caixas[numero_caixa], num_caixas);
 
             break;
 
