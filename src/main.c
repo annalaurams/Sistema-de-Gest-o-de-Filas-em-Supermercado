@@ -1,5 +1,32 @@
 #include "funcoes.h"
 
+int validar_opcao_menu()
+{
+    char entrada[10]; 
+    int opcao;
+
+    while (1)
+    {
+        printf("\nDigite o valor do que deseja fazer (0 a 5): ");
+        scanf("%s", entrada);
+
+        if (!validar_entrada_numerica(entrada))
+        {
+            printf("\n\t[ERRO] Entrada inválida! Digite apenas números.\n");
+            continue;
+        }
+
+        opcao = atoi(entrada); 
+        if (opcao < 0 || opcao > 5)
+        {
+            printf("\n\t[ERRO] Opção inválida! Escolha entre 0 e 5.\n");
+            continue;
+        }
+
+        return opcao; // Retorna a opção válida
+    }
+}
+
 int main()
 {
     int num_caixas = 5;
@@ -22,20 +49,8 @@ int main()
         printf("\t\n[3] Abrir ou Fechar um Caixa");
         printf("\t\n[4] Imprimir a Lista de Clientes em Espera");
         printf("\t\n[5] Imprimir o Status dos Caixas");
-        printf("\t\n\n> ");
-
-        if (scanf("%d", &opcao) != 1) // Verifica se a entrada é um número válido
-        {
-            printf("\n\t[ERRO] Entrada inválida! Digite apenas números.\n");
-            while (getchar() != '\n'); // Limpa o buffer para evitar loops infinitos
-            continue; // Retorna ao início do loop, sem processar o switch
-        }
-
-        if (opcao < 0 || opcao > 5) // Verifica se a opção está no intervalo permitido
-        {
-            printf("\n\t[ERRO] Opção inválida. Escolha entre 0 e 5.\n");
-            continue; // Retorna ao menu principal
-        }
+    
+        opcao = validar_opcao_menu();
 
         switch (opcao)
         {
@@ -64,7 +79,7 @@ int main()
             break;
 
         default:
-            // Essa mensagem dificilmente será exibida, pois já há validação acima
+        
             printf("\nOpção inválida. Tente novamente.\n");
         }
 
