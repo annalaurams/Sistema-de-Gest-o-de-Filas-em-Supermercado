@@ -42,7 +42,6 @@ int main()
         printf("\n=================================================================================================\n");
         printf("\n\tSeja Bem-Vindo(a) ao");
         printf("\n      Sistema de Gestão de Filas em Supermercado \n");
-        printf("\nDigite o valor do que deseja fazer: \n");
         printf("\t\n[0] Sair ");
         printf("\t\n[1] Cadastrar um Cliente");
         printf("\t\n[2] Atender um Cliente");
