@@ -448,6 +448,7 @@ void remover_cliente(Caixa *caixas, int num_caixas) {
         return;
     }
 }
+
 void realocar_clientes_caixa(Caixa *caixas, int num_caixas)
 {
     int fechar = 0;
@@ -459,87 +460,90 @@ void realocar_clientes_caixa(Caixa *caixas, int num_caixas)
         return;
     }
 
-    printf("\nNúmero do caixa que deseja fechar: ");
-    scanf("%d", &fechar);
+    char entrada[10]; // Para capturar a entrada como string
 
-    int idx_fechar = -1;
+    while (1)
+    {
+        printf("\nNúmero do caixa que deseja fechar: ");
+        scanf("%s", entrada);
 
-    // Identificar o índice do caixa a ser fechado
+        if (!validar_entrada_numerica(entrada))
+        {
+            printf("\n\t[ERRO] Entrada inválida. Digite apenas números.\n");
+            continue;
+        }
+
+        fechar = atoi(entrada);
+
+        if (fechar < 1 || fechar > num_caixas)
+        {
+            printf("\n\t[ERRO] Número do caixa inválido. Deve ser entre 1 e %d.\n", num_caixas);
+            continue;
+        }
+
+        break; // Entrada válida, sai do loop
+    }
+
+    printf("\nFechando...\n");
+    auxiliar++;
+
     for (int i = 0; i < num_caixas; i++)
     {
         if (caixas[i].id == fechar)
         {
-            idx_fechar = i;
-            break;
-        }
-    }
-    Caixa *caixa_fechar = &caixas[idx_fechar];
-
-    if (idx_fechar == -1 || caixas[idx_fechar].estado == 0)
-    {
-        printf("\n\t[ERRO] Caixa inválido ou já fechado.\n");
-        return;
-    }
-
-    else if (caixa_fechar->fila.tamanho == 0)
-    {
-        printf("\n\t[ATENÇÃO] O caixa %d já está vazio.\n", fechar);
-        caixas[idx_fechar].estado = 0;
-        auxiliar++;
-        return;
-    }
-
-    // Lista de caixas abertos
-    int caixas_abertos[num_caixas];
-    int num_abertos = 0;
-    for (int i = 0; i < num_caixas; i++)
-    {
-        if (caixas[i].estado == 1 && i != idx_fechar)
-        {
-            caixas_abertos[num_abertos++] = i;
-        }
-    }
-
-    if (num_abertos == 0)
-    {
-        printf("\n\t[ERRO] Nenhum outro caixa aberto para realocar clientes.\n");
-        return;
-    }
-
-    // Distribuir os clientes de forma equilibrada
-    No *atual = caixa_fechar->fila.primeiro;
-    while (atual != NULL)
-    {
-        // Encontrar o caixa com a menor fila entre os abertos
-        int menor_fila_idx = caixas_abertos[0];
-        for (int j = 1; j < num_abertos; j++)
-        {
-            if (caixas[caixas_abertos[j]].fila.tamanho < caixas[menor_fila_idx].fila.tamanho)
+            if (caixas[i].estado == 0)
             {
-                menor_fila_idx = caixas_abertos[j];
+                printf("\n\t[ATENÇÃO] Caixa %d já está fechado.\n", fechar);
+                return;
             }
+
+            int menor_fila_idx = -1;
+            int menor_tamanho = __INT_MAX__;
+
+            for (int j = 0; j < num_caixas; j++)
+            {
+                if (caixas[j].estado == 1 && j != i)
+                {
+                    if (caixas[j].fila.tamanho < menor_tamanho)
+                    {
+                        menor_tamanho = caixas[j].fila.tamanho;
+                        menor_fila_idx = j;
+                    }
+                }
+            }
+
+            if (menor_fila_idx != -1)
+            {
+                printf("\nRealocando clientes do Caixa %d para o Caixa %d.\n", fechar, caixas[menor_fila_idx].id);
+
+                No *atual = caixas[i].fila.primeiro;
+                while (atual != NULL)
+                {
+                    inserir_fila_com_prioridade(&caixas[menor_fila_idx].fila, atual->cliente);
+                    atual = atual->proximo;
+                }
+
+                caixas[i].fila.primeiro = NULL;
+                caixas[i].fila.ultimo = NULL;
+                caixas[i].fila.ultimo_p1 = NULL;
+                caixas[i].fila.ultimo_p2 = NULL;
+                caixas[i].fila.tamanho = 0;
+
+                caixas[i].estado = 0;
+                printf("\nCaixa %d fechado com sucesso.\n", fechar);
+            }
+            else
+            {
+                printf("\n\t[ATENÇÃO] Nenhum outro caixa aberto disponível para realocação.\n");
+            }
+
+            return;
         }
-
-        // Realocar o cliente para o caixa com a menor fila
-        inserir_fila_com_prioridade(&caixas[menor_fila_idx].fila, atual->cliente);
-        caixas[menor_fila_idx].fila.tamanho++;
-
-        // Avançar para o próximo cliente
-        atual = atual->proximo;
     }
-
-    // Limpar a fila do caixa fechado
-    caixa_fechar->fila.primeiro = NULL;
-    caixa_fechar->fila.ultimo = NULL;
-    caixa_fechar->fila.ultimo_p1 = NULL;
-    caixa_fechar->fila.ultimo_p2 = NULL;
-    caixa_fechar->fila.tamanho = 0;
-
-    // Fechar o caixa
-    caixas[idx_fechar].estado = 0;
-    auxiliar++;
-    printf("\n\tCaixa %d fechado e clientes realocados com sucesso.\n", fechar);
+    printf("\n\t[ATENÇÃO] Caixa %d não encontrado.\n", fechar);
+    printf("\n-------------------------------------------------------------------------------------------------\n");
 }
+
 
 
 void imprimir_clientes_espera(Caixa *caixas, int num_caixas)
@@ -615,8 +619,8 @@ void imprimir_clientes_espera(Caixa *caixas, int num_caixas)
             // printf("\nResumo: %d clientes de prioridade 1, %d de prioridade 2, %d de prioridade 3.\n", p1, p2, p3);
         }
         else
-        {
-            printf("\nCaixa %d está fechado.\n", caixas[i].id);
+        {   
+            printf("\n\tCAIXA %d está fechado.\n", caixas[i].id);
         }
 
         printf("\n-------------------------------------------------------------------------------------------------\n");

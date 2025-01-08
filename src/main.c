@@ -8,9 +8,7 @@ int main()
 
     ler_caixas(caixas, num_caixas);
 
-    // imprimir_caixa(caixas, num_caixas);
-
-    int opcao = 0;
+    int opcao = -1;
 
     do
     {
@@ -26,47 +24,47 @@ int main()
         printf("\t\n[5] Imprimir o Status dos Caixas");
         printf("\t\n\n> ");
 
-        scanf("%d", &opcao);
+        if (scanf("%d", &opcao) != 1) // Verifica se a entrada é um número válido
+        {
+            printf("\n\t[ERRO] Entrada inválida! Digite apenas números.\n");
+            while (getchar() != '\n'); // Limpa o buffer para evitar loops infinitos
+            continue; // Retorna ao início do loop, sem processar o switch
+        }
+
+        if (opcao < 0 || opcao > 5) // Verifica se a opção está no intervalo permitido
+        {
+            printf("\n\t[ERRO] Opção inválida. Escolha entre 0 e 5.\n");
+            continue; // Retorna ao menu principal
+        }
 
         switch (opcao)
         {
         case 0:
-
             printf("\n\t Obrigado por utilizar nossos serviços! \n");
-
             break;
+
         case 1:
-
             cadastrar_cliente(caixas, num_caixas);
-            // ler_clientes_do_arquivo(caixas, num_caixas);
-            //  imprimir_clientes(caixas, num_caixas);
-
             break;
 
         case 2:
-
             remover_cliente(&caixas[numero_caixa], num_caixas);
-
             break;
 
         case 3:
-
             realocar_clientes_caixa(caixas, num_caixas);
-
             break;
+
         case 4:
-
             imprimir_clientes_espera(caixas, num_caixas);
-
             break;
+
         case 5:
-
             exibir_estado_caixas(caixas, num_caixas);
-
             break;
 
         default:
-
+            // Essa mensagem dificilmente será exibida, pois já há validação acima
             printf("\nOpção inválida. Tente novamente.\n");
         }
 
