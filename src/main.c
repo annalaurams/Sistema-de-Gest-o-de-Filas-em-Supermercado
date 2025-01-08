@@ -2,7 +2,7 @@
 
 int validar_opcao_menu()
 {
-    char entrada[10]; 
+    char entrada[10];
     int opcao;
 
     while (1)
@@ -16,7 +16,7 @@ int validar_opcao_menu()
             continue;
         }
 
-        opcao = atoi(entrada); 
+        opcao = atoi(entrada);
         if (opcao < 0 || opcao > 5)
         {
             printf("\n\t[ERRO] Opção inválida! Escolha entre 0 e 5.\n");
@@ -49,7 +49,7 @@ int main()
         printf("\t\n[3] Abrir ou Fechar um Caixa");
         printf("\t\n[4] Imprimir a Lista de Clientes em Espera");
         printf("\t\n[5] Imprimir o Status dos Caixas");
-    
+
         opcao = validar_opcao_menu();
 
         switch (opcao)
@@ -60,6 +60,7 @@ int main()
 
         case 1:
             cadastrar_cliente(caixas, num_caixas);
+            //ler_clientes_do_arquivo(caixas, num_caixas);
             break;
 
         case 2:
@@ -79,7 +80,7 @@ int main()
             break;
 
         default:
-        
+
             printf("\nOpção inválida. Tente novamente.\n");
         }
 
