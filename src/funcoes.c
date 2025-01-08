@@ -634,11 +634,11 @@ void exibir_estado_caixas(Caixa *caixas, int num_caixas)
 
         if (caixas[i].estado == 1)
         {
-            printf("\nCaixa %d: Aberto\n", caixas[i].id);
+            printf("\nCAIXA %d: Aberto\n", caixas[i].id);
         }
         else
         {
-            printf("\nCaixa %d: Fechado\n", caixas[i].id);
+            printf("\nCAIXA %d: Fechado\n", caixas[i].id);
         }
 
         printf("\nNúmero de clientes em espera: %d\n", caixas[i].fila.tamanho);
