@@ -7,7 +7,7 @@ int validar_opcao_menu()
 
     while (1)
     {
-        printf("\nDigite o valor do que deseja fazer (0 a 5): ");
+        printf("\n\nDigite o valor do que deseja fazer (0 a 5): ");
         scanf("%s", entrada);
 
         if (!validar_entrada_numerica(entrada))
