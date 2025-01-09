@@ -58,8 +58,8 @@ int main()
             break;
 
         case 1:
-            cadastrar_cliente(caixas, num_caixas);
-            //ler_clientes_do_arquivo(caixas, num_caixas);
+            //cadastrar_cliente(caixas, num_caixas);
+            ler_clientes_do_arquivo(caixas, num_caixas);
             break;
 
         case 2:

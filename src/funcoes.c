@@ -246,7 +246,7 @@ void ler_clientes_do_arquivo(Caixa *caixas, int num_caixas)
 
     Cliente cliente;
 
-    for (int i = 0; i < 10; i++)
+    for (int i = 0; i < 12; i++)
     {
         fgets(cliente.nome, sizeof(cliente.nome), file);
         cliente.nome[strcspn(cliente.nome, "\n")] = 0;
@@ -497,45 +497,49 @@ void realocar_clientes_caixa(Caixa *caixas, int num_caixas)
                 return;
             }
 
-            int menor_fila_idx = -1;
-            int menor_tamanho = __INT_MAX__;
-
-            for (int j = 0; j < num_caixas; j++)
+            // Iterar sobre os clientes do caixa fechado
+            No *atual = caixas[i].fila.primeiro;
+            while (atual != NULL)
             {
-                if (caixas[j].estado == 1 && j != i)
+                // Encontre o caixa aberto com a menor fila
+                int menor_fila_idx = -1;
+                int menor_tamanho = __INT_MAX__;
+
+                for (int j = 0; j < num_caixas; j++)
                 {
-                    if (caixas[j].fila.tamanho < menor_tamanho)
+                    if (caixas[j].estado == 1 && j != i)
                     {
-                        menor_tamanho = caixas[j].fila.tamanho;
-                        menor_fila_idx = j;
+                        if (caixas[j].fila.tamanho < menor_tamanho)
+                        {
+                            menor_tamanho = caixas[j].fila.tamanho;
+                            menor_fila_idx = j;
+                        }
                     }
                 }
-            }
 
-            if (menor_fila_idx != -1)
-            {
-                printf("\nRealocando clientes do Caixa %d para o Caixa %d.\n", fechar, caixas[menor_fila_idx].id);
-
-                No *atual = caixas[i].fila.primeiro;
-                while (atual != NULL)
+                if (menor_fila_idx != -1)
                 {
+                    // Realoca o cliente para o caixa com a menor fila
                     inserir_fila_com_prioridade(&caixas[menor_fila_idx].fila, atual->cliente);
-                    atual = atual->proximo;
+                }
+                else
+                {
+                    printf("\n\t[ATENÇÃO] Nenhum outro caixa aberto disponível para realocação.\n");
+                    return;
                 }
 
-                caixas[i].fila.primeiro = NULL;
-                caixas[i].fila.ultimo = NULL;
-                caixas[i].fila.ultimo_p1 = NULL;
-                caixas[i].fila.ultimo_p2 = NULL;
-                caixas[i].fila.tamanho = 0;
+                atual = atual->proximo;
+            }
 
-                caixas[i].estado = 0;
-                printf("\nCaixa %d fechado com sucesso.\n", fechar);
-            }
-            else
-            {
-                printf("\n\t[ATENÇÃO] Nenhum outro caixa aberto disponível para realocação.\n");
-            }
+            // Limpa a fila do caixa fechado
+            caixas[i].fila.primeiro = NULL;
+            caixas[i].fila.ultimo = NULL;
+            caixas[i].fila.ultimo_p1 = NULL;
+            caixas[i].fila.ultimo_p2 = NULL;
+            caixas[i].fila.tamanho = 0;
+
+            caixas[i].estado = 0;
+            printf("\nCaixa %d fechado com sucesso.\n", fechar);
 
             return;
         }
@@ -543,6 +547,7 @@ void realocar_clientes_caixa(Caixa *caixas, int num_caixas)
     printf("\n\t[ATENÇÃO] Caixa %d não encontrado.\n", fechar);
     printf("\n-------------------------------------------------------------------------------------------------\n");
 }
+
 
 
 
