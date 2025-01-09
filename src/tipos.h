@@ -1,7 +1,8 @@
 #ifndef TIPOS_H
 #define TIPOS_H
 
-typedef struct {
+typedef struct
+{
 
     char nome[100];
     char cpf[12];
@@ -11,24 +12,27 @@ typedef struct {
 
 } Cliente;
 
-typedef struct No {
+typedef struct No
+{
 
     Cliente cliente;
-    struct No *proximo; 
+    struct No *proximo;
 
 } No;
 
-typedef struct Fila {
+typedef struct Fila
+{
 
     No *primeiro;
     No *ultimo;
-    No *ultimo_p1; 
-    No *ultimo_p2; 
+    No *ultimo_p1;
+    No *ultimo_p2;
     int tamanho;
 
 } Fila;
 
-typedef struct {
+typedef struct
+{
 
     int id;
     int estado; // 1 aberto, 0 fechado
@@ -36,4 +40,4 @@ typedef struct {
 
 } Caixa;
 
-#endif 
+#endif

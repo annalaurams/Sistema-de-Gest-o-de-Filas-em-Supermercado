@@ -2,7 +2,7 @@
 #ifndef FUNCOES_H
 #define FUNCOES_H
 
-#include "include.h" 
+#include "include.h"
 
 void ler_caixas(Caixa *caixas, int num_caixas);
 void imprimir_caixa(Caixa *caixas, int num_caixas);
@@ -12,7 +12,7 @@ void inserir_fila_com_prioridade(Fila *fila, Cliente cliente);
 
 int validar_entrada_numerica(const char *entrada);
 int verificar_cpf_existe(Caixa *caixas, int num_caixas, const char *cpf);
-int validar_nome(char nome[]) ;
+int validar_nome(char nome[]);
 int validar_cpf(const char *cpf);
 
 int verificar_caixa_aberto(Caixa *caixas, int num_caixas);
@@ -28,6 +28,4 @@ void imprimir_clientes_espera(Caixa *caixas, int num_caixas);
 void exibir_estado_caixas(Caixa *caixas, int num_caixas);
 void abrir_caixa(Caixa *caixas, int num_caixas);
 
-#endif 
-
-
+#endif

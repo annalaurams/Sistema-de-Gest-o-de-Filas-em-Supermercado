@@ -387,39 +387,47 @@ void imprimir_clientes(Caixa *caixas, int num_caixas)
     printf("\n===================================================================\n\n");
 }
 
-void remover_cliente(Caixa *caixas, int num_caixas) {
+void remover_cliente(Caixa *caixas, int num_caixas)
+{
     char entrada[10];
     int numero_caixa;
 
-    while (1) {
+    while (1)
+    {
         printf("\nDigite o número do caixa: ");
         scanf("%s", entrada);
 
-        if (!validar_entrada_numerica(entrada)) {
+        if (!validar_entrada_numerica(entrada))
+        {
             printf("\n\t[ERRO] Entrada inválida! Digite apenas números.\n");
             continue;
         }
 
         numero_caixa = atoi(entrada) - 1; // Subtrai 1 para ajustar ao índice do vetor
 
-        if (numero_caixa < 0 || numero_caixa >= num_caixas) {
+        if (numero_caixa < 0 || numero_caixa >= num_caixas)
+        {
             printf("\n\t[ERRO] Caixa inválido! Escolha um número entre 1 e %d.\n", num_caixas);
             continue;
         }
 
         Caixa *caixa = &caixas[numero_caixa];
 
-        if (caixa->estado == 0) {
+        if (caixa->estado == 0)
+        {
             printf("\n[ATENÇÃO] O caixa %d está fechado. Escolha um caixa aberto:\n", numero_caixa + 1);
-            for (int i = 0; i < num_caixas; i++) {
-                if (caixas[i].estado == 1) {
+            for (int i = 0; i < num_caixas; i++)
+            {
+                if (caixas[i].estado == 1)
+                {
                     printf("Caixa %d\n", caixas[i].id);
                 }
             }
             continue; // Retorna ao início do loop para solicitar outro caixa
         }
 
-        if (caixa->fila.tamanho == 0) {
+        if (caixa->fila.tamanho == 0)
+        {
             printf("\nA fila do caixa %d está vazia. Não há clientes para serem atendidos\n", caixa->id);
             return;
         }
@@ -430,14 +438,20 @@ void remover_cliente(Caixa *caixas, int num_caixas) {
         caixa->fila.primeiro = caixa->fila.primeiro->proximo; // Move o primeiro para o próximo nó
 
         // Se a fila agora estiver vazia, atualiza o último
-        if (caixa->fila.primeiro == NULL) {
+        if (caixa->fila.primeiro == NULL)
+        {
             caixa->fila.ultimo = NULL;
             caixa->fila.ultimo_p1 = NULL;
             caixa->fila.ultimo_p2 = NULL;
-        } else {
-            if (cliente_removido.prioridade == 1) {
+        }
+        else
+        {
+            if (cliente_removido.prioridade == 1)
+            {
                 caixa->fila.ultimo_p1 = NULL;
-            } else if (cliente_removido.prioridade == 2) {
+            }
+            else if (cliente_removido.prioridade == 2)
+            {
                 caixa->fila.ultimo_p2 = NULL;
             }
         }
@@ -497,7 +511,6 @@ void realocar_clientes_caixa(Caixa *caixas, int num_caixas)
                 return;
             }
 
-            // Iterar sobre os clientes do caixa fechado
             No *atual = caixas[i].fila.primeiro;
             while (atual != NULL)
             {
@@ -519,7 +532,7 @@ void realocar_clientes_caixa(Caixa *caixas, int num_caixas)
 
                 if (menor_fila_idx != -1)
                 {
-                    // Realoca o cliente para o caixa com a menor fila
+
                     inserir_fila_com_prioridade(&caixas[menor_fila_idx].fila, atual->cliente);
                 }
                 else
@@ -531,7 +544,6 @@ void realocar_clientes_caixa(Caixa *caixas, int num_caixas)
                 atual = atual->proximo;
             }
 
-            // Limpa a fila do caixa fechado
             caixas[i].fila.primeiro = NULL;
             caixas[i].fila.ultimo = NULL;
             caixas[i].fila.ultimo_p1 = NULL;
@@ -547,9 +559,6 @@ void realocar_clientes_caixa(Caixa *caixas, int num_caixas)
     printf("\n\t[ATENÇÃO] Caixa %d não encontrado.\n", fechar);
     printf("\n-------------------------------------------------------------------------------------------------\n");
 }
-
-
-
 
 void imprimir_clientes_espera(Caixa *caixas, int num_caixas)
 {
@@ -624,7 +633,7 @@ void imprimir_clientes_espera(Caixa *caixas, int num_caixas)
             // printf("\nResumo: %d clientes de prioridade 1, %d de prioridade 2, %d de prioridade 3.\n", p1, p2, p3);
         }
         else
-        {   
+        {
             printf("\n\tCAIXA %d está fechado.\n", caixas[i].id);
         }
 
