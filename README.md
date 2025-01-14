@@ -74,7 +74,7 @@ Na remoção, o primeiro cliente é retirado, e o ponteiro `primeiro` é atualiz
 
 - O sistema é gerenciado por um switch case.
 - O sistema inicia com número fixo de 5 caixas, todos iniciam como abertos.
-- Durante a execução, sempre há pelo menos 1 caixa aberto. São configurados via leitura de um arquivo intitulado `caixas.txt`. Onde uma linha é o identificador do caixa e a outra o valor `1` corresponde a variável boleana estado, que indica que estã aberto.
+- Durante a execução, sempre há pelo menos 1 caixa aberto. São configurados via leitura de um arquivo intitulado `caixas.txt`. Onde uma linha é o identificador do caixa e a outra o valor `1` corresponde a variável boleana estado, que indica que está aberto.
 - Não se pode cadastrar caixas além dos inicialmente disponíveis. 
 - Cada caixa terá sua própria fila.
 - Durante a execução do sistema, sempre haverá pelo menos um caixa aberto. Os caixas são configurados através da leitura do arquivo `caixas.txt`, no início do programa, onde:  
