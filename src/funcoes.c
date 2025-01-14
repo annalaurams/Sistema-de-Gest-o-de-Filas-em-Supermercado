@@ -1,6 +1,7 @@
 #include "funcoes.h"
 
-int auxiliar = 0;
+int qtd_fechado = 0;
+int qtd_abertos = 5;
 Cliente *tabela_clientes = NULL;
 
 void ler_caixas(Caixa *caixas, int num_caixas)
@@ -463,44 +464,8 @@ void remover_cliente(Caixa *caixas, int num_caixas)
     }
 }
 
-void realocar_clientes_caixa(Caixa *caixas, int num_caixas)
+void realocar_clientes_caixa(Caixa *caixas, int num_caixas, int fechar)
 {
-    int fechar = 0;
-
-    if (auxiliar == 4)
-    {
-        printf("\n\t[ATENÇÃO] Não é possível fechar mais caixas.\n");
-        printf("\n-------------------------------------------------------------------------------------------------\n");
-        return;
-    }
-
-    char entrada[10]; // Para capturar a entrada como string
-
-    while (1)
-    {
-        printf("\nNúmero do caixa que deseja fechar: ");
-        scanf("%s", entrada);
-
-        if (!validar_entrada_numerica(entrada))
-        {
-            printf("\n\t[ERRO] Entrada inválida. Digite apenas números.\n");
-            continue;
-        }
-
-        fechar = atoi(entrada);
-
-        if (fechar < 1 || fechar > num_caixas)
-        {
-            printf("\n\t[ERRO] Número do caixa inválido. Deve ser entre 1 e %d.\n", num_caixas);
-            continue;
-        }
-
-        break; // Entrada válida, sai do loop
-    }
-
-    printf("\nFechando...\n");
-    auxiliar++;
-
     for (int i = 0; i < num_caixas; i++)
     {
         if (caixas[i].id == fechar)
@@ -514,7 +479,6 @@ void realocar_clientes_caixa(Caixa *caixas, int num_caixas)
             No *atual = caixas[i].fila.primeiro;
             while (atual != NULL)
             {
-                // Encontre o caixa aberto com a menor fila
                 int menor_fila_idx = -1;
                 int menor_tamanho = __INT_MAX__;
 
@@ -532,7 +496,6 @@ void realocar_clientes_caixa(Caixa *caixas, int num_caixas)
 
                 if (menor_fila_idx != -1)
                 {
-
                     inserir_fila_com_prioridade(&caixas[menor_fila_idx].fila, atual->cliente);
                 }
                 else
@@ -552,12 +515,91 @@ void realocar_clientes_caixa(Caixa *caixas, int num_caixas)
 
             caixas[i].estado = 0;
             printf("\nCaixa %d fechado com sucesso.\n", fechar);
+            qtd_fechado++;
+            qtd_abertos--;
+            caixas[i].estado = 0;
+            // printf("\nqtd aberto: %d \n", qtd_abertos);
 
             return;
         }
     }
     printf("\n\t[ATENÇÃO] Caixa %d não encontrado.\n", fechar);
     printf("\n-------------------------------------------------------------------------------------------------\n");
+}
+
+void abrir_caixa(Caixa *caixas, int num_caixas, int abrir)
+{
+    for (int i = 0; i < num_caixas; i++)
+    {
+        if (caixas[i].id == abrir)
+        {
+            if (caixas[i].estado == 1)
+            {
+                printf("\n\t[ATENÇÃO] Caixa %d já está aberto.\n", abrir);
+                return;
+            }
+            else
+            {
+                printf("\nCaixa %d aberto!\n", abrir);
+                caixas[i].estado = 1;
+                qtd_abertos++;
+                qtd_fechado--;
+
+                return;
+            }
+        }
+    }
+    printf("\n\t[ATENÇÃO] Caixa %d não encontrado.\n", abrir);
+    printf("\n-------------------------------------------------------------------------------------------------\n");
+}
+
+void caixa(Caixa *caixas, int num_caixas)
+{
+    int opcao = -1, entrada;
+
+    while (1)
+    {
+        printf("\nDeseja abrir ou fechar o caixa?");
+        printf("\n[1] Abrir \n[0] Fechar\n\n>");
+        if (scanf("%d", &opcao) != 1 || (opcao != 0 && opcao != 1))
+        {
+            printf("\n\t[ERRO] Entrada inválida! Digite apenas 0 ou 1.\n");
+            while (getchar() != '\n')
+                ; // Limpar buffer
+            continue;
+        }
+
+        if (opcao == 0 && qtd_abertos == 1)
+        {
+            printf("\n\t[ATENÇÃO] Não é possível fechar mais caixas. Pelo menos um deve permanecer aberto.\n");
+            return;
+        }
+        if (opcao == 1 && qtd_abertos == num_caixas)
+        {
+            printf("\n\t[ATENÇÃO] Todos os caixas já estão abertos.\n");
+            return;
+        }
+
+        printf("\nEscolha o número do caixa (1 a %d): ", num_caixas);
+        if (scanf("%d", &entrada) != 1 || entrada < 1 || entrada > num_caixas)
+        {
+            printf("\n\t[ERRO] Entrada inválida! Digite um número de caixa válido.\n");
+            while (getchar() != '\n')
+                ; // Limpar buffer
+            continue;
+        }
+
+        if (opcao == 0)
+        {
+            realocar_clientes_caixa(caixas, num_caixas, entrada);
+            return;
+        }
+        else
+        {
+            abrir_caixa(caixas, num_caixas, entrada);
+            return;
+        }
+    }
 }
 
 void imprimir_clientes_espera(Caixa *caixas, int num_caixas)
@@ -657,32 +699,5 @@ void exibir_estado_caixas(Caixa *caixas, int num_caixas)
 
         printf("\nNúmero de clientes em espera: %d\n", caixas[i].fila.tamanho);
         printf("\n-------------------------------------------------------------------------------------------------\n");
-    }
-}
-
-void abrir_caixa(Caixa *caixas, int num_caixas)
-{
-
-    int abrir = 0;
-
-    printf("\nNúmero do caixa que deseja abrir: ");
-    scanf("%d", &abrir);
-
-    for (int i = 0; i < num_caixas; i++)
-    {
-        if (caixas[i].id == abrir)
-        {
-            if (caixas[i].estado == 1)
-            {
-                printf("\nCaixa %d já está aberto.\n", abrir);
-                return;
-            }
-            else
-            {
-                caixas[i].estado = 1;
-                auxiliar--;
-                return;
-            }
-        }
     }
 }

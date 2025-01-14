@@ -23,9 +23,12 @@ void cadastrar_cliente(Caixa *caixas, int num_caixas);
 void imprimir_clientes(Caixa *caixas, int num_caixas);
 
 void remover_cliente(Caixa *caixas, int num_caixas);
-void realocar_clientes_caixa(Caixa *caixas, int num_caixas);
+
+void realocar_clientes_caixa(Caixa *caixas, int num_caixas, int fechar);
+void abrir_caixa(Caixa *caixas, int num_caixas, int abrir);
+void caixa(Caixa *caixas, int num_caixas);
+
 void imprimir_clientes_espera(Caixa *caixas, int num_caixas);
 void exibir_estado_caixas(Caixa *caixas, int num_caixas);
-void abrir_caixa(Caixa *caixas, int num_caixas);
 
 #endif
